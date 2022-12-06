@@ -1,7 +1,7 @@
 import argparse
 import numbers
 from types import NoneType 
-from functions import percentage, readMetricsV1, directoryFiles
+from functions.functions import percentage, readMetricsV1, directoryFiles
 import pandas as pd
 import matplotlib.pyplot as plt
 from os.path import exists, isfile, join

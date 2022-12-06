@@ -8,16 +8,17 @@ import pickle
 from dash import Dash, dash_table
 import pandas as pd
 
-with open("metrics_summary.pickle", 'rb') as handle:
-    testdatei= pickle.load(handle) 
+
+dash.register_page(__name__)
+
+
+"""with open("data/metrics_summary.pickle", 'rb') as handle:
+    testdatei= pickle.load(handle) """
 
    
-dash.register_page(__name__)
 
 layout = html.Div(children=[
     html.H1(children='This is our Archive page'),
-
-      dash_table.DataTable(testdatei.to_dict('records'), [{"name": i, "id": i} for i in testdatei.columns]),
     html.Div(children='''
         This is our Archive page content.
     '''),
