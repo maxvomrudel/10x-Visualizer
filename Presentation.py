@@ -10,8 +10,8 @@ from dash import Dash, dash_table
 import pandas as pd
 
 #setup
-with open("metrics_summary.pickle", 'rb') as handle:
-    testdatei= pickle.load(handle) 
+with open("data/metrics_summary.pickle", 'rb') as handle:
+    testdatei= pickle.load(handle)
 
 
 grouplist = ["Estimated Number of Cells","Mean Reads per Cell","Median Genes per Cell","Number of Reads","Valid Barcodes","Sequencing Saturation","Q30 Bases in Barcode","Q30 Bases in RNA Read","Q30 Bases in UMI","Reads Mapped to Genome","Reads Mapped Confidently to Genome","Reads Mapped Confidently to Intergenic Regions","Reads Mapped Confidently to Intronic Regions","Reads Mapped Confidently to Exonic Regions","Reads Mapped Confidently to Transcriptome","Reads Mapped Antisense to Gene","Fraction Reads in Cells","Total Genes Detected","Median UMI Counts per Cell","Filename","BfxProjekt","Samplename","Type"]
