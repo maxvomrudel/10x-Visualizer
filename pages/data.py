@@ -1,13 +1,8 @@
 # Import necessary libraries 
-from dash import html
 import dash_bootstrap_components as dbc
 import dash
-from dash import html,dcc
-from matplotlib.colors import colorConverter
 import plotly.express as px
-from dash.dependencies import Input, Output
 import pickle
-from dash import Dash, dash_table
 from dash import Dash, dash_table, dcc, html
 from dash.dependencies import Input, Output
 import pandas as pd

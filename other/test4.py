@@ -23,10 +23,13 @@ werte= testdatei.groupby(["BfxProjekt"]).mean(numeric_only=True).apply(round)
 fig1 = px.line(werte, x=werte.index , y = "Estimated Number of Cells")
 fig2 = px.line(werte, x=werte.index , y = "Mean Reads per Cell")
 fig3 = px.line(werte, x=werte.index , y = "Median Genes per Cell")
-fig4 = px.line(werte, x=werte.index , y = "Median Genes per Cell")
+
+
+werte2 = testdatei.groupby(["BfxProjekt"]).count()
+
+fig4 = px.bar(werte2, x=werte2.index , y = "Samplename")
 
 def wertebekommen(input):
-    #testdatei.groupby("samplename").apply(Summe += testdatei[input])
     Summe = sum(testdatei[input])
     return Summe
 
@@ -44,41 +47,47 @@ app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 app.layout = dbc.Container(
     [dbc.Row(
             [
-                dbc.Col(html.Div(style= {"border":"double"}, children=[html.H1("overview"),
-                
-                
-                
-                
-                
-                #dash_table.DataTable(data={"name": Index, "id": Tabelleninhalt})
-                ]), width=3),
+                dbc.Col(html.Div(style= {}, children=[
+                    html.H1("Overview"),
+                    html.Ul(children=[
+                        html.Li("Number of experiments: " + str(werte.size)),
+                       
+                        html.Li("Number of samples: " + str(testdatei.size)),
+                       
+                        html.Li("Total number of cells: " + str(Numberofcells))
+                ])
+
+
+                ]),width=3),
 
                 dbc.Col(html.Div(children=[
-                    html.Div(style= {"border":"double"}, children=[
+                    html.Div(style= {}, children=[
                          dbc.Row([
             
-                dbc.Col(style={"border":"double",'textAlign':'center'},children=[
+                dbc.Col(style={'textAlign':'center'},children=[
                         html.P("Estimated number of cells"),
-                        dcc.Graph(id="fig1",figure=fig1, style={})
+                        dcc.Graph(id="fig1",figure=fig1, style={}),
+                        html.H1("")
                         ], width=6),
 
-                dbc.Col(style={"border":"double",'textAlign':'center'},children=[
+                dbc.Col(style={'textAlign':'center'},children=[
                         html.P("Mean reads in cells"),
-                        dcc.Graph(id="fig2",figure=fig2, style={})
+                        dcc.Graph(id="fig2",figure=fig2, style={}),
+                        html.H1("")
                     ], width=6)
 
                     ])]),
 
 
-                    html.Div(style= {"border":"double"}, children=[
+                    html.Div(style= {}, children=[
                         dbc.Row([
             
-                dbc.Col(style={"border":"double",'textAlign':'center'},children=[
+                dbc.Col(style={'textAlign':'center'},children=[
                         html.P("Estimated number of genes"),
                         dcc.Graph(id="fig3",figure=fig3, style={})
                         ], width=6),
 
-                dbc.Col(style={"border":"double",'textAlign':'center'},children=[
+                dbc.Col(style={'textAlign':'center'},children=[
                         html.P("Number of samples"),
                         dcc.Graph(id="fig4",figure=fig4, style={})
                     ], width=6)
