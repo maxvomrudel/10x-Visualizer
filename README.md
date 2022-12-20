@@ -4,6 +4,8 @@
   * Kleinschreibung (e.g. "datei")
   * Mehrere Wörter durch Unterstrich trennen ("lade_datei")
   * Wenn möglich selbsterklärend ("lade_datei")
+  * Deutsch oder besser Englisch
+  * Konsistenz
 * Layout:
   * Einrückung konsistent vier Leerzeichen (keine Tabs)
   * Leerzeilen sparsam verwenden (üblich 1 maximal max 2 Leerzeilen)
