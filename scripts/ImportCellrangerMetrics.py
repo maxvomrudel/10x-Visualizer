@@ -1,7 +1,7 @@
 import argparse
 import numbers
 from types import NoneType 
-from functions.functions import percentage, readMetricsV1, directoryFiles
+from functions.functions import percentage, read_metrics_v1, directory_files
 import pandas as pd
 import matplotlib.pyplot as plt
 from os.path import exists, isfile, join
@@ -51,7 +51,7 @@ if not directory and not files:
 if directory and not files:
     files = []
     for i in directory:
-        files = files + directoryFiles(i)
+        files = files + directory_files(i)
 
 if not table:
     print("filename for output Table missing (--table)")
@@ -63,25 +63,25 @@ for f in files:
 
 
 #parse metrics Files
-metricsData =[]
+metrics_data =[]
 for d in files:
-    metrics_v1 = readMetricsV1(d,template_summary_v1)
-    metricsData.extend(metrics_v1)
+    metrics_v1 = read_metrics_v1(d,template_summary_v1)
+    metrics_data.extend(metrics_v1)
 
-metricsData_df = pd.DataFrame(metricsData, index=[l["Samplename"] for l in metricsData ])
+metrics_data_df = pd.DataFrame(metrics_data, index=[l["Samplename"] for l in metrics_data ])
 
 
 
 #bestehende Datei wird geladen und durch neuen Inhalt erweitert
 if append and exists(table):
     with open(table, 'rb') as handle:
-        old_metricsData_df= pickle.load(handle)
-        metricsData_df = pd.concat([old_metricsData_df, metricsData_df])
+        old_metrics_data_df= pickle.load(handle)
+        metrics_data_df = pd.concat([old_metrics_data_df, metrics_data_df])
 
 #Inhalt wird in Datei geschrieben
 with open(table, 'wb') as handle:
-   pickle.dump(metricsData_df, handle, protocol=pickle.HIGHEST_PROTOCOL)
-metricsData_df.to_csv("metrics.csv")
+   pickle.dump(metrics_data_df, handle, protocol=pickle.HIGHEST_PROTOCOL)
+metrics_data_df.to_csv("metrics.csv")
 #nur zum Reinschauen benötigt
 
 

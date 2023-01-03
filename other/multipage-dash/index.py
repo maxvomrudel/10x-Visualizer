@@ -12,7 +12,7 @@ from pages import overview, data
 from components import navbar
 
 # define the navbar
-nav = navbar.Navbar()
+nav = navbar.navbar()
 
 # Define the index page layout
 app.layout = html.Div([

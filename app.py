@@ -1,5 +1,3 @@
-# Define the Dash App and it's properties here 
-
 import dash
 import dash_bootstrap_components as dbc
 
@@ -10,5 +8,3 @@ app = dash.Dash(__name__,
 
 
 
-#BS = "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-#app = dash.Dash(external_stylesheets=[BS])

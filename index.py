@@ -1,20 +1,15 @@
-# Import necessary libraries 
 from dash import html, dcc
 from dash.dependencies import Input, Output
-# Connect to main app.py file
 from app import app
-
-  
 from pages import data, overview
-
-# Connect the navbar to the index
 from components import navbar
 import dash
 import dash_bootstrap_components as dbc
 
 
+
 # define the navbar
-nav = navbar.Navbar()
+nav = navbar.navbar()
 
 # Define the index page layout
 app.layout = html.Div([
@@ -25,18 +20,13 @@ app.layout = html.Div([
 
 @app.callback(Output('page-content', 'children'),
               [Input('url', 'pathname')])
-def display_page(pathname):
-    if pathname == '/overview':
+def display_page(path_name):
+    if path_name == '/overview':
         return overview.layout
-    if pathname == '/data':
+    if path_name == '/data':
         return data.layout
     else:
-        return ("nü"
-            "nü"
-        "nü"
-        "nü"
-        "nü"
-        "nü")
+        return ()
         
 
 # Run the app on localhost:8050

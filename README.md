@@ -23,3 +23,14 @@
 * Siehe auch:
   * https://realpython.com/python-pep8/
   * Nutze pydocstyle für das Programmieren
+
+
+
+
+# Installation
+//Details zum Starten des Programms:
+ Visualisieren:
+ Index starten
+ zum Einlesen::
+ scirpts -> improtCellarangerMetrics.py:
+ Konsole:python3.exe "dateiname" argumente
