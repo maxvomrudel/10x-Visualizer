@@ -24,8 +24,7 @@ fig4 = px.bar(werte2, x=werte2.index, y="Samplename")
 
 
 def get_values(input):
-    sum = sum(testdatei[input])
-    return sum
+    return sum(testdatei[input])
 
 
 number_of_cells = get_values("Estimated Number of Cells")
