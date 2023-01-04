@@ -25,4 +25,3 @@ template_summary_v1 = {
 
 metrics_v1 = readCsv('metrics_summary_v1.csv', template_summary_v1)
 print(metrics_v1)
-

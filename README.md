@@ -28,7 +28,12 @@
 
 
 # Installation
-//Details zum Starten des Programms:
+
+## Abhängkeiten installieren
+
+`pip install -r requirements.txt`
+
+## Starten des Programms:
  Visualisieren:
  Index starten
  zum Einlesen::
