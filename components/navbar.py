@@ -9,7 +9,8 @@ def navbar():
         dbc.NavbarSimple(
             children=[
                 dbc.NavItem(dbc.NavLink("overview", href="/overview")),
-                dbc.NavItem(dbc.NavLink("data", href="/data"))
+                dbc.NavItem(dbc.NavLink("data", href="/data")),
+                dbc.NavItem(dbc.NavLink("Diagramm", href="/diagramm"))
             ],
             brand="Multipage Dash App",
             brand_href="/overview",

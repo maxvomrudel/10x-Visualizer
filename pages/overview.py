@@ -35,61 +35,65 @@ Index = [
     "3. Total number of cells"
 ]
 
+summary = dbc.Card(
+    [
+        dbc.CardBody([
+            html.H4("Overview", className="card-title"),
+            html.P("Number of experiments: " + str(werte.size)),
+            html.P("Number of samples: " + str(testdatei.size)),
+            html.P("Total number of cells: " + str(number_of_cells))
+        ]
+        ),
+    ],
+    style={"width": "18rem"},
+)
+
+diagrams = html.Div(children=[
+    html.Div(style={},
+             children=[
+        dbc.Row([
+            dbc.Col(style={'textAlign': 'center'},
+                    children=[
+                html.P("Estimated number of cells"),
+                dcc.Graph(
+                    id="fig1", figure=fig1, style={}),
+                html.H1("")
+            ],
+                width=6),
+            dbc.Col(style={'textAlign': 'center'},
+                    children=[
+                html.P("Mean reads in cells"),
+                dcc.Graph(
+                    id="fig2", figure=fig2, style={}),
+                html.H1("")
+            ],
+                width=6)
+        ])
+    ]),
+    html.Div(
+        style={},
+        children=[
+            dbc.Row([
+                dbc.Col(style={'textAlign': 'center'},
+                        children=[
+                    html.P("Estimated number of genes"),
+                    dcc.Graph(id="fig3", figure=fig3, style={})
+                ],
+                    width=6),
+                dbc.Col(style={'textAlign': 'center'},
+                        children=[
+                    html.P("Number of samples"),
+                    dcc.Graph(id="fig4", figure=fig4, style={})
+                ],
+                    width=6)
+            ])
+        ]),
+    html.Div("hello")
+])
+
 layout = dbc.Container([
     dbc.Row([
-        dbc.Col(html.Div(
-            style={},
-            children=[
-                html.H1("Overview"),
-                html.Ul(children=[
-                    html.Li("Number of experiments: " + str(werte.size)),
-                    html.Li("Number of samples: " + str(testdatei.size)),
-                    html.Li("Total number of cells: " + str(number_of_cells))
-                ])
-            ]),
-                width=3),
-        dbc.Col(html.Div(children=[
-            html.Div(style={},
-                     children=[
-                         dbc.Row([
-                             dbc.Col(style={'textAlign': 'center'},
-                                     children=[
-                                         html.P("Estimated number of cells"),
-                                         dcc.Graph(
-                                             id="fig1", figure=fig1, style={}),
-                                         html.H1("")
-                                     ],
-                                     width=6),
-                             dbc.Col(style={'textAlign': 'center'},
-                                     children=[
-                                         html.P("Mean reads in cells"),
-                                         dcc.Graph(
-                                             id="fig2", figure=fig2, style={}),
-                                         html.H1("")
-                                     ],
-                                     width=6)
-                         ])
-                     ]),
-            html.Div(
-                style={},
-                children=[
-                    dbc.Row([
-                        dbc.Col(style={'textAlign': 'center'},
-                                children=[
-                                    html.P("Estimated number of genes"),
-                                    dcc.Graph(id="fig3", figure=fig3, style={})
-                                ],
-                                width=6),
-                        dbc.Col(style={'textAlign': 'center'},
-                                children=[
-                                    html.P("Number of samples"),
-                                    dcc.Graph(id="fig4", figure=fig4, style={})
-                                ],
-                                width=6)
-                    ])
-                ]),
-            html.Div("hello")
-        ]),
-                width=9),
-    ]),
+        dbc.Col(summary),
+        dbc.Col(diagrams)
+    ])
 ])
