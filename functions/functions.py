@@ -4,6 +4,8 @@ from multiprocessing.sharedctypes import RawValue
 from os.path import isfile, join, basename
 from os import listdir
 
+# Ergebnistyp beim Einlesen der CSV-Dateien
+Data = list[dict]
 
 def read_csv(filename: str, template: dict):
     with open(filename, newline='') as csvfile:
@@ -14,7 +16,7 @@ def read_csv(filename: str, template: dict):
         # erste zeile mit header überspringen
         next(csvreader)
 
-        result: data = []
+        result: Data = []
         for line_dict in csvreader:
             #print("LINE ---- ", lineDict)
             result.append(convert_values(line_dict, template))
@@ -23,13 +25,14 @@ def read_csv(filename: str, template: dict):
 
 def read_metrics_v1(datei, template_summary_v1):
     # Ergebnis-Typ für die Daten aus den CSV-Dateien
-    #Data = list[dict]
+    
     #Vorlage für summary_v1
     result = read_csv(datei, template_summary_v1)
     result[0]["Filename"] = datei
     dateiname = datei.replace('.cellranger_rnaseq_metrics_summary.csv', '')
     dataname = basename(dateiname)
 
+    # Format 
     x = dataname.split(".", 1)
     result[0]["BfxProjekt"] = x[0]
     result[0]["Samplename"] = x[1]
@@ -38,7 +41,7 @@ def read_metrics_v1(datei, template_summary_v1):
     return result
 
 
-# nimmt ein dict und konvertiert alle werte entsprechend der vorlage in "template"
+# nimmt ein dict und konvertiert alle werte entsprechend der vorlage in "template" und liefert das dict zurück
 def convert_values(dict: dict, template: dict):
     for fieldName in dict:
         # type conversion for each key in dictionary, according to template

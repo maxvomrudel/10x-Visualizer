@@ -77,5 +77,7 @@ if append and exists(table):
 #Inhalt wird in Datei geschrieben
 with open(table, 'wb') as handle:
     pickle.dump(metrics_data_df, handle, protocol=pickle.HIGHEST_PROTOCOL)
-metrics_data_df.to_csv("metrics.csv")
+
 #nur zum Reinschauen benötigt
+metrics_data_df.to_csv("metrics.csv")
+

@@ -6,13 +6,10 @@ from components import navbar
 import dash
 import dash_bootstrap_components as dbc
 
-# define the navbar
-nav = navbar.navbar()
-
 # Define the index page layout
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
-    nav,
+    navbar.component,
     html.Div(id='page-content', children=[]),
 ])
 
