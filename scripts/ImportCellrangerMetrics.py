@@ -1,34 +1,12 @@
 import argparse
 import numbers
 from types import NoneType
-from functions.functions import percentage, read_metrics_v1, directory_files
+from functions.metrics_v1 import read_metrics_v1
+from functions.files import directory_files
 import pandas as pd
 import matplotlib.pyplot as plt
-from os.path import exists, isfile, join
-from os import listdir
+from os.path import exists
 import pickle
-
-template_summary_v1 = {
-    "Estimated Number of Cells": int,
-    "Mean Reads per Cell": int,
-    "Median Genes per Cell": int,
-    "Number of Reads": int,
-    "Valid Barcodes": percentage,
-    "Sequencing Saturation": percentage,
-    "Q30 Bases in Barcode": percentage,
-    "Q30 Bases in RNA Read": percentage,
-    "Q30 Bases in UMI": percentage,
-    "Reads Mapped to Genome": percentage,
-    "Reads Mapped Confidently to Genome": percentage,
-    "Reads Mapped Confidently to Intergenic Regions": percentage,
-    "Reads Mapped Confidently to Intronic Regions": percentage,
-    "Reads Mapped Confidently to Exonic Regions": percentage,
-    "Reads Mapped Confidently to Transcriptome": percentage,
-    "Reads Mapped Antisense to Gene": percentage,
-    "Fraction Reads in Cells": percentage,
-    "Total Genes Detected": int,
-    "Median UMI Counts per Cell": int,
-}
 
 #Parse Arguments
 parser = argparse.ArgumentParser()
@@ -62,7 +40,7 @@ for f in files:
 #parse metrics Files
 metrics_data = []
 for d in files:
-    metrics_v1 = read_metrics_v1(d, template_summary_v1)
+    metrics_v1 = read_metrics_v1(d)
     metrics_data.extend(metrics_v1)
 
 metrics_data_df = pd.DataFrame(metrics_data,

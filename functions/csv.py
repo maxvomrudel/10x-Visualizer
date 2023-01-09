@@ -1,8 +1,6 @@
 import csv
 from hashlib import blake2b
 from multiprocessing.sharedctypes import RawValue
-from os.path import isfile, join, basename
-from os import listdir
 
 # Ergebnistyp beim Einlesen der CSV-Dateien
 Data = list[dict]
@@ -21,25 +19,6 @@ def read_csv(filename: str, template: dict):
             #print("LINE ---- ", lineDict)
             result.append(convert_values(line_dict, template))
     return result
-
-
-def read_metrics_v1(datei, template_summary_v1):
-    # Ergebnis-Typ für die Daten aus den CSV-Dateien
-    
-    #Vorlage für summary_v1
-    result = read_csv(datei, template_summary_v1)
-    result[0]["Filename"] = datei
-    dateiname = datei.replace('.cellranger_rnaseq_metrics_summary.csv', '')
-    dataname = basename(dateiname)
-
-    # Format 
-    x = dataname.split(".", 1)
-    result[0]["BfxProjekt"] = x[0]
-    result[0]["Samplename"] = x[1]
-    result[0]["Type"] = "V1"
-
-    return result
-
 
 # nimmt ein dict und konvertiert alle werte entsprechend der vorlage in "template" und liefert das dict zurück
 def convert_values(dict: dict, template: dict):
@@ -80,13 +59,3 @@ def numeric(rawValue: str):
 # - ein Prozent-Wert ist
 def numeric_or_percent(rawValue: str):
     return percentage(rawValue) if ('%' in rawValue) else numeric(rawValue)
-
-
-#function returns files from directory
-def directory_files(mypath):
-    only_files = []
-    for f in listdir(mypath):
-        if isfile(join(mypath, f)) and f.endswith("summary.csv"):
-            only_files.append(join(mypath, f))
-
-    return only_files
