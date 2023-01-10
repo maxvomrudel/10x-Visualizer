@@ -14,7 +14,8 @@ with open("data/metrics_summary.pickle", 'rb') as handle:
     testdatei = pickle.load(handle)
 
 werte = testdatei.groupby(["BfxProjekt"]).mean(numeric_only=True).apply(round)
-spalten = testdatei.columns
+spalten = werte.select_dtypes(include="number").columns
+arten= ["line","bar","scatter"]
 
 fig = px.line(werte, x=werte.index, y=spalten[0])
 
@@ -43,21 +44,40 @@ sidebar = html.Div(
         ),
         html.Div(
             [
-                dbc.Label("Werte"),
+                dbc.Label("Werte der y-Achse"),
                 dcc.Dropdown(
                     id="y-variable",
                     options=[
                         {"label": col, "value": col} for col in spalten
                     ],
+                    
                     value=spalten[0],
                 ),
-            ]
+                 dbc.Label("Diagrammart"),
+                dcc.Dropdown(
+                    id="Diagrammart",
+                    options=[
+                        {"label": col, "value": col} for col in arten
+                    ],
+                    value=arten[0],
+                    
+                ),
+                 dbc.Label("X-Achse für Scatter"),
+                dcc.Dropdown(
+                    id="x-scatter", #für die x-Werte des Scattergraphen
+                    options=[
+                        {"label": col, "value": col} for col in spalten
+                    ],
+                    value=spalten[0]),
+                      ]
         )
     ],
     style=SIDEBAR_STYLE,
 )
 
 diagram = dcc.Graph(id="diagram", figure=fig, style={})
+
+
 
 content = html.Div(
     [diagram],
@@ -73,8 +93,19 @@ layout = html.Div([
     Output("diagram", "figure"),
     [
         Input("y-variable", "value"),
+        Input("Diagrammart", "value"),
+        Input("x-scatter", "value")
     ],
 )
-def make_graph(y):
-    print("Wert für Y: " + y)
-    return px.line(werte, x=werte.index, y=y)
+
+def make_graph(y, Art,x):
+    if Art=="line":
+        print("Diagrammart: " + y)
+        return px.line(werte, x=werte.index, y=y)
+    elif Art=="scatter":
+        print("Diagrammart: " + y)
+        return px.scatter(werte, x=x, y=y, color=y)
+    else:
+        print("Diagrammart: " + y)
+        return px.bar(werte, x=werte.index, y=y)
+
