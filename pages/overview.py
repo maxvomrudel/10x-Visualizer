@@ -6,6 +6,9 @@ import plotly.express as px
 import pickle
 from dash import Dash, dash_table, dcc, html
 import pandas as pd
+from dash_bootstrap_templates import load_figure_template
+
+load_figure_template("DARKLY")
 
 dash.register_page(__name__)
 
@@ -50,13 +53,13 @@ summary = dbc.Card(
 
 diagrams = html.Div(children=[
     html.Div(style={},
-             children=[
+        children=[
         dbc.Row([
             dbc.Col(style={'textAlign': 'center'},
                     children=[
                 html.P("Estimated number of cells"),
                 dcc.Graph(
-                    id="fig1", figure=fig1, style={}),
+                    id="fig1", figure=fig1),
                 html.H1("")
             ],
                 width=6),
@@ -64,12 +67,12 @@ diagrams = html.Div(children=[
                     children=[
                 html.P("Mean reads in cells"),
                 dcc.Graph(
-                    id="fig2", figure=fig2, style={}),
+                    id="fig2", figure=fig2),
                 html.H1("")
             ],
                 width=6)
         ])
-    ]),
+            ]),
     html.Div(
         style={},
         children=[
@@ -77,19 +80,19 @@ diagrams = html.Div(children=[
                 dbc.Col(style={'textAlign': 'center'},
                         children=[
                     html.P("Estimated number of genes"),
-                    dcc.Graph(id="fig3", figure=fig3, style={})
+                    dcc.Graph(id="fig3", figure=fig3)
                 ],
                     width=6),
                 dbc.Col(style={'textAlign': 'center'},
                         children=[
                     html.P("Number of samples"),
-                    dcc.Graph(id="fig4", figure=fig4, style={})
+                    dcc.Graph(id="fig4", figure=fig4)
                 ],
                     width=6)
             ])
         ]),
     html.Div("hello")
-])
+],style={"width": "54rem"})
 
 layout = dbc.Container([
     dbc.Row([

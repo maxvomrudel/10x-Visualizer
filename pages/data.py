@@ -6,6 +6,9 @@ import pickle
 from dash import Dash, dash_table, dcc, html
 from dash.dependencies import Input, Output
 import pandas as pd
+from dash_bootstrap_templates import load_figure_template
+
+load_figure_template("DARKLY")
 
 dash.register_page(__name__)
 
