@@ -9,9 +9,9 @@ from dash.dependencies import Input, Output
 import pandas as pd
 from dash_bootstrap_templates import load_figure_template
 
-load_figure_template("DARKLY")
+load_figure_template("darkly")
 
-dash.register_page(__name__)
+#dash.register_page(__name__)
 
 with open("data/metrics_summary.pickle", 'rb') as handle:
     testdatei = pickle.load(handle)

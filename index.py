@@ -25,7 +25,7 @@ def display_page(path_name):
     if path_name == '/testdiagramm':
         return testdiagramm.layout
     else:
-        return ()
+        return (overview.layout)
 
 
 # Run the app on localhost:8050

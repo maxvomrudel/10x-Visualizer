@@ -9,7 +9,7 @@ from dash.dependencies import Input, Output
 import pandas as pd
 from dash_bootstrap_templates import load_figure_template
 
-load_figure_template("DARKLY")
+load_figure_template("darkly")
 
 
 dash.register_page(__name__)
@@ -31,78 +31,40 @@ SIDEBAR_STYLE = {
     "background-color": "#f8f9fa",
 }
 
-
-
-
 # the styles for the main content position it to the right of the sidebar and
 # add some padding.
 CONTENT_STYLE = {
-    #"margin-left": "18rem",
-   # "margin-right": "2rem",
+    "margin-left": "20px",
+    #"margin-right": "16px",
     #"padding": "2rem 1rem",
 }
 
-"""sidebar = html.Div(
-    [
-        html.H2("Settings", className="display-4"),
-        html.Hr(),
-        html.P(
-            "select diagram parameters", className="lead"
-        ),
-        html.Div(
-            [
-               
-                      ]
-        )
-    ],
-    style=SIDEBAR_STYLE,
-)"""
-
 row = html.Div(
-        dbc.Row([dbc.Col(style={'textAlign': 'center'},children = [
-            dcc.Dropdown(
+    dbc.Row([
+        dbc.Col(style={'textAlign': 'center'},children = [
+            dbc.DropdownMenu(
+                    label = "Y Wert",
                     id="y-variable",
-                    options=[
-                        {"label": col, "value": col} for col in spalten
-                    ],
-                    
-                    value=spalten[0],
-            ),
-        ],width = 4),
+                    children=[
+                        dbc.DropdownMenuItem(col) for col in spalten
+                    ])],width = 4),
    
         dbc.Col(style={'textAlign': 'center'},children = [
-            dcc.Dropdown(
+            dbc.DropdownMenu(
+                    label = "Type of diagram",
                     id="Diagrammart",
-                    options=[
-                        {"label": col, "value": col} for col in arten
-                    ],
-                    value=arten[0],
-                    
-                ),
-   ],width = 4),
+                    children=[
+                        dbc.DropdownMenuItem(col) for col in spalten
+                    ])],width = 4),
    
         dbc.Col(style={'textAlign': 'center'},children = [
-            dcc.Dropdown(
-                    id="x-scatter", #für die x-Werte des Scattergraphen
-                    options=[
-                        {"label": col, "value": col} for col in spalten
-                    ],
-                    value=spalten[0]),
-
-   ],width = 4)]))
-
-diagram = dcc.Graph(id="testdiagram", figure=fig, style={'height': "85vh", "width":"180vh" })
-
-
-content = html.Div(
-    [diagram],
-    style=CONTENT_STYLE)
-
-layout = html.Div([
-    row, 
-    content
-])
-
+            dbc.DropdownMenu(
+                    label = "Value of the abscissa if scatter was choosen",
+                    id= "x-scatter",
+                    children=[
+                        dbc.DropdownMenuItem(col) for col in spalten
+                    ])],width = 4)
+    ]))
 
 @callback(
     Output("testdiagram", "figure"),
@@ -124,3 +86,18 @@ def make_graph(y, Art,x):
         print("Diagrammart: " + y)
         return px.bar(werte, x=werte.index, y=y)
 
+diagram = dcc.Graph(id="testdiagram", figure=fig, style={'height': "85vh", "width":"170vh",'textAlign': 'center' })
+
+
+content = html.Div(html.Div(
+    [diagram],
+    style=CONTENT_STYLE))
+
+layout = html.Div([
+    html.H1(""),
+    html.H1(""),
+    row, 
+    html.H1(""),
+    html.H1(""),
+    content
+])

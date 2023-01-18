@@ -8,7 +8,7 @@ from dash import Dash, dash_table, dcc, html
 import pandas as pd
 from dash_bootstrap_templates import load_figure_template
 
-load_figure_template("DARKLY")
+load_figure_template("darkly")
 
 dash.register_page(__name__)
 
@@ -32,7 +32,7 @@ def get_values(input):
 
 number_of_cells = get_values("Estimated Number of Cells")
 
-table_content = [werte.size, testdatei.size, number_of_cells]
+table_content = [werte.shape[0], testdatei.shape[0], number_of_cells]
 Index = [
     "1. Number of experiments", "2. Number of samples",
     "3. Total number of cells"
@@ -42,8 +42,8 @@ summary = dbc.Card(
     [
         dbc.CardBody([
             html.H4("Overview", className="card-title"),
-            html.P("Number of experiments: " + str(werte.size)),
-            html.P("Number of samples: " + str(testdatei.size)),
+            html.P("Number of experiments: " + str(werte.shape[0])),
+            html.P("Number of samples: " + str(testdatei.shape[0])),
             html.P("Total number of cells: " + str(number_of_cells))
         ]
         ),
@@ -52,51 +52,42 @@ summary = dbc.Card(
 )
 
 diagrams = html.Div(children=[
-    html.Div(style={},
-        children=[
-        dbc.Row([
-            dbc.Col(style={'textAlign': 'center'},
-                    children=[
-                html.P("Estimated number of cells"),
-                dcc.Graph(
-                    id="fig1", figure=fig1),
-                html.H1("")
-            ],
-                width=6),
-            dbc.Col(style={'textAlign': 'center'},
-                    children=[
-                html.P("Mean reads in cells"),
-                dcc.Graph(
-                    id="fig2", figure=fig2),
-                html.H1("")
-            ],
-                width=6)
-        ])
-            ]),
     html.Div(
-        style={},
+        style={'textAlign': 'center'},
         children=[
-            dbc.Row([
-                dbc.Col(style={'textAlign': 'center'},
-                        children=[
-                    html.P("Estimated number of genes"),
-                    dcc.Graph(id="fig3", figure=fig3)
-                ],
-                    width=6),
-                dbc.Col(style={'textAlign': 'center'},
-                        children=[
-                    html.P("Number of samples"),
-                    dcc.Graph(id="fig4", figure=fig4)
-                ],
-                    width=6)
-            ])
+            html.P("Estimated number of genes"),
+            dcc.Graph(id="fig3", figure=fig3),
+            html.H1("")
+        ]),
+    html.Div(
+        style={"textAlign":"center"},
+        children=[
+            html.P("Number of samples"),
+            dcc.Graph(id="fig4", figure=fig4),
+            html.H1("")
+        ]),
+    html.Div(
+        style={"textAlign":"center"},
+        children=[
+            html.P("Estimated number of cells"),
+            dcc.Graph(id="fig1", figure=fig1),
+            html.H1("")
+        ]),
+    html.Div(
+        style={"textAlign":"center"},
+        children=[
+            html.P("Mean reads in cells"),
+            dcc.Graph(id="fig2", figure=fig2),
+            html.H1("")
         ]),
     html.Div("hello")
-],style={"width": "54rem"})
+    ])
 
 layout = dbc.Container([
     dbc.Row([
-        dbc.Col(summary),
-        dbc.Col(diagrams)
+        dbc.Col(children=[summary], width=3),
+        dbc.Col(children=[diagrams], width=9)
     ])
 ])
+
+
