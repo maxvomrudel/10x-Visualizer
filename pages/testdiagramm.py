@@ -14,76 +14,104 @@ load_figure_template("darkly")
 
 dash.register_page(__name__)
 
-with open("data/metrics_summary.pickle", 'rb') as handle:
+with open("table", 'rb') as handle:
     testdatei = pickle.load(handle)
 
-werte = testdatei.groupby(["BfxProjekt"]).mean(numeric_only=True).apply(round)
-spalten = werte.select_dtypes(include="number").columns
+werte = testdatei.groupby(["BfxProjekt"]).mean().apply(round)
+numerischeSpalten = werte.select_dtypes(include="number").columns
 arten= ["line","bar","scatter"]
+alleSpalten = testdatei.columns
 
-fig = px.line(werte, x=werte.index, y=spalten[0])
 
 
-# the style arguments for the sidebar. We use position:fixed and a fixed width
+fig = px.line(werte, x=werte.index, y=numerischeSpalten[0])
+
 SIDEBAR_STYLE = {
     "width": "25rem",
-    "padding": "16px",
-    "background-color": "#f8f9fa",
+    "padding": "16px"
 }
 
-# the styles for the main content position it to the right of the sidebar and
-# add some padding.
 CONTENT_STYLE = {
-    "margin-left": "20px",
-    #"margin-right": "16px",
-    #"padding": "2rem 1rem",
+    "margin-left": "20px"
 }
 
-row = html.Div(
+row = html.Div(children=[
+    dbc.Row([
+        dbc.Col(style={'textAlign': 'center'},children=[
+            html.H6("Y")
+        ]),
+            
+        dbc.Col(style={'textAlign': 'center'},children=[
+            html.H6("Type of diagram")
+        ]),
+   
+        dbc.Col(style={'textAlign': 'center'},children=[
+            html.H6("X (only in scatter)")
+        ]),
+
+        dbc.Col(style={'textAlign': 'center'},children=[
+            html.H6("color (only in scatter)")
+        ])
+    ]),
     dbc.Row([
         dbc.Col(style={'textAlign': 'center'},children = [
-            dbc.DropdownMenu(
-                    label = "Y Wert",
+            dcc.Dropdown(
                     id="y-variable",
-                    children=[
-                        dbc.DropdownMenuItem(col) for col in spalten
-                    ])],width = 4),
+                    options=[
+                        {"label": col, "value": col} for col in numerischeSpalten
+                    ],
+                value="Estimated Number of Cells"                        
+                ),
+        ],width = 3),
    
         dbc.Col(style={'textAlign': 'center'},children = [
-            dbc.DropdownMenu(
-                    label = "Type of diagram",
-                    id="Diagrammart",
-                    children=[
-                        dbc.DropdownMenuItem(col) for col in spalten
-                    ])],width = 4),
+            dcc.Dropdown(
+                    id="Type of diagram",
+                    options=[
+                        {"label": col, "value": col} for col in arten
+                    ],
+                    value=arten[0],
+                    
+                )],width = 3),
    
         dbc.Col(style={'textAlign': 'center'},children = [
-            dbc.DropdownMenu(
-                    label = "Value of the abscissa if scatter was choosen",
-                    id= "x-scatter",
-                    children=[
-                        dbc.DropdownMenuItem(col) for col in spalten
-                    ])],width = 4)
-    ]))
+            dcc.Dropdown(
+                    id="x-scatter",
+                    options=[
+                        {"label": col, "value": col} for col in numerischeSpalten
+                    ],
+                    value=numerischeSpalten[0],
+                    
+                )],width = 3),
+
+        dbc.Col(style={'textAlign': 'center'},children = [
+            dcc.Dropdown(
+                    id="color",
+                    options=[
+                        {"label": col, "value": col} for col in alleSpalten
+                    ],
+                    value=alleSpalten[0],
+                    
+                )],width = 3)
+    ])])
+
 
 @callback(
     Output("testdiagram", "figure"),
     [
         Input("y-variable", "value"),
-        Input("Diagrammart", "value"),
-        Input("x-scatter", "value")
+        Input("Type of diagram", "value"),
+        Input("x-scatter", "value"),
+        Input("color", "value")
     ],
 )
 
-def make_graph(y, Art,x):
+def make_graph(y, Art,x,z):
     if Art=="line":
-        print("Diagrammart: " + y)
         return px.line(werte, x=werte.index, y=y)
     elif Art=="scatter":
-        print("Diagrammart: " + y)
-        return px.scatter(werte, x=x, y=y, color=y)
+        return px.scatter(testdatei, x=x, y=y, color=z)
     else:
-        print("Diagrammart: " + y)
         return px.bar(werte, x=werte.index, y=y)
 
 diagram = dcc.Graph(id="testdiagram", figure=fig, style={'height': "85vh", "width":"170vh",'textAlign': 'center' })

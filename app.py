@@ -8,3 +8,6 @@ app = dash.Dash(__name__,
                     "content": "width=device-width"
                 }],
                 suppress_callback_exceptions=True)
+
+
+

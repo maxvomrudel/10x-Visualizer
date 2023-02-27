@@ -8,8 +8,8 @@ component = html.Div([
         children=[
             dbc.NavItem(dbc.NavLink("overview", href="/overview")),
             dbc.NavItem(dbc.NavLink("data", href="/data")),
-            dbc.NavItem(dbc.NavLink("diagramm", href="/diagramm")),
-            dbc.NavItem(dbc.NavLink("testdiagramm", href="/testdiagramm"))
+            dbc.NavItem(dbc.NavLink("testdiagramm", href="/testdiagramm")),
+            dbc.NavItem(dbc.NavLink("Projekt", href="/Projekt")),
         ],
         brand="Multipage Dash App",
         brand_href="/overview",

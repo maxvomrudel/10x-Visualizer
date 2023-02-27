@@ -1,7 +1,7 @@
 from dash import html, dcc
 from dash.dependencies import Input, Output
 from app import app
-from pages import data, overview, diagram, testdiagramm
+from pages import data, overview, testdiagramm, Projekt
 from components import navbar
 import dash
 import dash_bootstrap_components as dbc
@@ -20,8 +20,8 @@ def display_page(path_name):
         return overview.layout
     if path_name == '/data':
         return data.layout
-    if path_name == '/diagramm':
-        return diagram.layout
+    if path_name == '/Projekt':
+        return Projekt.layout
     if path_name == '/testdiagramm':
         return testdiagramm.layout
     else:

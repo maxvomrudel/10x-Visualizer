@@ -37,7 +37,7 @@
  Visualisieren:
  Index starten
  zum Einlesen::
- scirpts -> improtCellarangerMetrics.py:
+ scirpts -> importCellarangerMetrics.py:
  Konsole:python3.exe "dateiname" argumente
 
  Vorschlag für das Layout der Diagramm-Seite: https://dash.plotly.com/basic-callbacks, Dash App With Multiple Inputs
