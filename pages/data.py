@@ -10,11 +10,11 @@ import pandas as pd
 dash.register_page(__name__)
 
 with open("data/metrics_summary.pickle", 'rb') as handle:
-    testdatei= pickle.load(handle)
+    source= pickle.load(handle)
 
 layout = dbc.Container(children=[dash_table.DataTable(
         id='datatable-interactivity',
-        columns=[{"name": i, "id": i, "deletable": True} for i in testdatei.columns],
+        columns=[{"name": i, "id": i, "deletable": True} for i in source.columns],
         style_header={
         'backgroundColor': 'rgb(30, 30, 30)',
         'color': 'white'
@@ -24,7 +24,7 @@ layout = dbc.Container(children=[dash_table.DataTable(
         'color': 'white'
     },
         
-        data=testdatei.to_dict('records'),
+        data=source.to_dict('records'),
         sort_action="native",
         sort_mode="multi",
         column_selectable="single",

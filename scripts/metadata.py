@@ -2,8 +2,10 @@ import pandas as pd
 import pickle
 
 
-with open("data/metrics_summary.pickle", 'rb') as handle:
-    testdatei= pickle.load(handle)
+with open("tableWithoutMeta", 'rb') as handle:
+    source= pickle.load(handle)
+
+#data/metrics_summary.pickle
 
 list = []
 index=0
@@ -17,9 +19,11 @@ for r in key_Column:
     index = index + 1
 
 metadataTable["Samplename"]=list
-parts = [metadataTable, testdatei]
-mergedTable = pd.merge(metadataTable, testdatei, how="right", on=["Samplename"])
+parts = [metadataTable, source]
+mergedTable = pd.merge(metadataTable, source, how="right", on=["Samplename"])
 print(mergedTable)
 
-with open("table", 'wb') as handle:
+with open("data/metrics_summary.pickle", 'wb') as handle:
     pickle.dump(mergedTable, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+

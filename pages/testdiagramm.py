@@ -14,13 +14,13 @@ load_figure_template("darkly")
 
 dash.register_page(__name__)
 
-with open("table", 'rb') as handle:
-    testdatei = pickle.load(handle)
+with open("data/metrics_summary.pickle", 'rb') as handle:
+    source = pickle.load(handle)
 
-werte = testdatei.groupby(["BfxProjekt"]).mean().apply(round)
+werte = source.groupby(["BfxProjekt"]).mean().apply(round)
 numerischeSpalten = werte.select_dtypes(include="number").columns
 arten= ["line","bar","scatter"]
-alleSpalten = testdatei.columns
+alleSpalten = source.columns
 
 
 
@@ -30,7 +30,6 @@ SIDEBAR_STYLE = {
     "width": "25rem",
     "padding": "16px"
 }
-
 CONTENT_STYLE = {
     "margin-left": "20px"
 }
@@ -110,7 +109,7 @@ def make_graph(y, Art,x,z):
     if Art=="line":
         return px.line(werte, x=werte.index, y=y)
     elif Art=="scatter":
-        return px.scatter(testdatei, x=x, y=y, color=z)
+        return px.scatter(source, x=x, y=y, color=z)
     else:
         return px.bar(werte, x=werte.index, y=y)
 

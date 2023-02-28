@@ -1,38 +1,44 @@
 import dash_bootstrap_components as dbc
 from dash import html
-from dash.dependencies import Input, Output
 import dash
 import plotly.express as px
 import pickle
-from dash import Dash, dash_table, dcc, html
+from dash import Dash, dash_table
 import pandas as pd
 from dash_bootstrap_templates import load_figure_template
+from datetime import date
+from dash import Dash, dcc, html, callback
+from dash.dependencies import Input, Output
 
 load_figure_template("darkly")
 
 dash.register_page(__name__)
 
 with open("data/metrics_summary.pickle", 'rb') as handle:
-    testdatei = pickle.load(handle)
+    source = pickle.load(handle)
 
-werte = testdatei.groupby(["BfxProjekt"]).mean(numeric_only=True).apply(round)
+#werte = source.groupby(["BfxProjekt"]).mean(numeric_only=True).apply(round)
 
-fig1 = px.line(werte, x=werte.index, y="Estimated Number of Cells")
-fig2 = px.line(werte, x=werte.index, y="Mean Reads per Cell")
-fig3 = px.line(werte, x=werte.index, y="Median Genes per Cell")
 
-werte2 = testdatei.groupby(["BfxProjekt"]).count()
-
-fig4 = px.bar(werte2, x=werte2.index, y="Samplename")
-
+numerischeSpalten = source.select_dtypes(include="number").columns
+andereSpalten = source.select_dtypes(exclude="number").columns
+werte = source.groupby("BfxProjekt").aggregate({s: 'mean' for s in numerischeSpalten} | {s: 'first' for s in andereSpalten})
+werte=werte.sort_values("SampleDate")
+fig1 = px.line(werte, x="SampleDate", y="Estimated Number of Cells")
+fig2 = px.line(werte, x="SampleDate", y="Mean Reads per Cell")
+fig3 = px.line(werte, x="SampleDate", y="Median Genes per Cell")
+werte2 = source.groupby(["BfxProjekt"]).count()
+werte2= werte2[["SampleDate"]]
+werte2.rename(columns={"SampleDate":"Number of samples"}, inplace=True)
+werte = pd.concat([werte, werte2], axis=1)
+fig4 = px.line(werte, x="SampleDate", y="Number of samples")
 
 def get_values(input):
-    return sum(testdatei[input])
-
+    return sum(source[input])
 
 number_of_cells = get_values("Estimated Number of Cells")
 
-table_content = [werte.shape[0], testdatei.shape[0], number_of_cells]
+table_content = [werte.shape[0], source.shape[0], number_of_cells]
 Index = [
     "1. Number of experiments", "2. Number of samples",
     "3. Total number of cells"
@@ -43,7 +49,7 @@ summary = dbc.Card(
         dbc.CardBody([
             html.H4("Overview", className="card-title"),
             html.P("Number of experiments: " + str(werte.shape[0])),
-            html.P("Number of samples: " + str(testdatei.shape[0])),
+            html.P("Number of samples: " + str(source.shape[0])),
             html.P("Total number of cells: " + str(number_of_cells))
         ]
         ),
@@ -59,6 +65,15 @@ diagrams = html.Div(children=[
             dcc.Graph(id="fig3", figure=fig3),
             html.H1("")
         ]),
+    html.Div([
+        dcc.DatePickerRange(
+            id='my-date-picker-range',
+            min_date_allowed=date(1995, 8, 5),
+            max_date_allowed=date(2040, 9, 19),
+            initial_visible_month=date(2017, 8, 5),
+            end_date=date(2017, 8, 25)),
+            html.Div(id='output-container-date-picker-range')
+            ]),
     html.Div(
         style={"textAlign":"center"},
         children=[
@@ -89,5 +104,19 @@ layout = dbc.Container([
         dbc.Col(children=[diagrams], width=9)
     ])
 ])
+@callback(
+    Output('fig3', 'figure'),
+    Input('my-date-picker-range', 'start_date'),
+    Input('my-date-picker-range', 'end_date'))
+def update_fig3(start_date, end_date):
+    filteredValues= werte
+    filteredValues['SampleDate'] = filteredValues['SampleDate'].astype('datetime64[ns]')
+    if start_date is not None:
+        filteredValues=filteredValues[filteredValues["SampleDate"]>=start_date]
 
-
+    if end_date is not None:
+        filteredValues=filteredValues[filteredValues["SampleDate"]<=end_date]
+    
+    print(filteredValues)
+    fig3 = px.line(filteredValues, x="SampleDate", y="Median Genes per Cell")
+    return fig3
