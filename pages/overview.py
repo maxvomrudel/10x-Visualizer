@@ -79,7 +79,7 @@ diagrams = html.Div(children=[
     html.Div(
         style={"textAlign":"center"},
         children=[
-            html.P("Number of samples"),
+            html.P("Number of Samples"),
             dcc.Graph(id="fig4", figure=fig4),
             html.H1("")
         ]),

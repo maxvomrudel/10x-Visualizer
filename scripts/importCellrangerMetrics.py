@@ -54,9 +54,9 @@ metadataTable = pd.read_table('metadata.tsv')
 key_Column = metadataTable.loc[:,"Key"]
 for r in key_Column:
     row = key_Column[index]
-    bfxProjektAndSamplename = row.split(".",1)
-    list.append(bfxProjektAndSamplename[1])
-    list2.append(bfxProjektAndSamplename[0])
+    bfxProjektAndSampleName = row.split(".",1)
+    list.append(bfxProjektAndSampleName[1])
+    list2.append(bfxProjektAndSampleName[0])
     index = index + 1
 
 metadataTable["SampleName"]=list

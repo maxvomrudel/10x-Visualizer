@@ -36,7 +36,7 @@ def read_metrics_v1(datei, template_summary_v1=template_summary_v1):
     # Format 
     x = dataname.split(".", 1)
     result[0]["BfxProjekt"] = x[0]
-    result[0]["Samplename"] = x[1]
+    result[0]["SampleName"] = x[1]
     result[0]["Type"] = "V1"
 
     return result
