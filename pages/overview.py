@@ -67,13 +67,14 @@ diagrams = html.Div(children=[
         ]),
     html.Div([
         dcc.DatePickerRange(
-            id='my-date-picker-range',
+            id='datePicker1',
             min_date_allowed=date(1995, 8, 5),
             max_date_allowed=date(2040, 9, 19),
             initial_visible_month=date(2017, 8, 5),
-            end_date=date(2017, 8, 25)),
-            html.Div(id='output-container-date-picker-range')
+            end_date=date(2030, 1, 1)),
+            html.Div(id='outputDatePicker1')
             ]),
+
     html.Div(
         style={"textAlign":"center"},
         children=[
@@ -81,6 +82,16 @@ diagrams = html.Div(children=[
             dcc.Graph(id="fig4", figure=fig4),
             html.H1("")
         ]),
+    html.Div([
+        dcc.DatePickerRange(
+            id='datePicker2',
+            min_date_allowed=date(1995, 8, 5),
+            max_date_allowed=date(2040, 9, 19),
+            initial_visible_month=date(2017, 8, 5),
+            end_date=date(2030, 1, 1)),
+            html.Div(id='outputDatePicker2')
+            ]),
+    
     html.Div(
         style={"textAlign":"center"},
         children=[
@@ -88,6 +99,16 @@ diagrams = html.Div(children=[
             dcc.Graph(id="fig1", figure=fig1),
             html.H1("")
         ]),
+    html.Div([
+        dcc.DatePickerRange(
+            id='datePicker3',
+            min_date_allowed=date(1995, 8, 5),
+            max_date_allowed=date(2040, 9, 19),
+            initial_visible_month=date(2017, 8, 5),
+            end_date=date(2030, 1, 1)),
+            html.Div(id='outputDatePicker3')
+            ]),
+
     html.Div(
         style={"textAlign":"center"},
         children=[
@@ -95,6 +116,16 @@ diagrams = html.Div(children=[
             dcc.Graph(id="fig2", figure=fig2),
             html.H1("")
         ]),
+    html.Div([
+        dcc.DatePickerRange(
+            id='datePicker4',
+            min_date_allowed=date(1995, 8, 5),
+            max_date_allowed=date(2040, 9, 19),
+            initial_visible_month=date(2017, 8, 5),
+            end_date=date(2030, 1, 1)),
+            html.Div(id='outputDatePicker4')
+            ]),
+
     html.Div("hello")
     ])
 
@@ -106,8 +137,8 @@ layout = dbc.Container([
 ])
 @callback(
     Output('fig3', 'figure'),
-    Input('my-date-picker-range', 'start_date'),
-    Input('my-date-picker-range', 'end_date'))
+    Input('datePicker1', 'start_date'),
+    Input('datePicker1', 'end_date'))
 def update_fig3(start_date, end_date):
     filteredValues= werte
     filteredValues['SampleDate'] = filteredValues['SampleDate'].astype('datetime64[ns]')
@@ -120,3 +151,4 @@ def update_fig3(start_date, end_date):
     print(filteredValues)
     fig3 = px.line(filteredValues, x="SampleDate", y="Median Genes per Cell")
     return fig3
+
