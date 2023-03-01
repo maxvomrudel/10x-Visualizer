@@ -14,7 +14,7 @@ with open("data/metrics_summary.pickle", 'rb') as handle:
     source= pickle.load(handle)
 
 data = []
-bfx = "bfx1966"
+bfx = "bfx1808"
 data = source[source["BfxProjekt"] == bfx]
     
 
@@ -79,6 +79,7 @@ layout = html.Div(children = [
                 sort_mode="multi",
                 column_selectable="single",
                 page_action="native",
+                filter_action="native",
                 page_current= 0,
                 style_table={'overflowY': 'auto'},
                 page_size=20

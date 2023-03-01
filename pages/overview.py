@@ -64,6 +64,7 @@ diagrams = html.Div(children=[
             min_date_allowed=date(1995, 8, 5),
             max_date_allowed=date(2040, 9, 19),
             initial_visible_month=date(2021, 8, 5),
+            start_date=date(2010, 1, 1),
             end_date=date(2030, 1, 1)),
             html.Div(id='outputDatePicker1')
             ]),
@@ -115,7 +116,7 @@ layout = dbc.Container([
     Input('datePicker1', 'end_date'))
 def update_fig3(start_date, end_date):
     filteredValues= werte
-    filteredValues['SampleDate'] = filteredValues['SampleDate'].astype('datetime64[ns]')
+    filteredValues['SampleDate'] = filteredValues['SampleDate'].astype('datetime64')
     if start_date is not None:
         filteredValues=filteredValues[filteredValues["SampleDate"]>=start_date]
 
