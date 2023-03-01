@@ -82,15 +82,6 @@ diagrams = html.Div(children=[
             dcc.Graph(id="fig4", figure=fig4),
             html.H1("")
         ]),
-    html.Div([
-        dcc.DatePickerRange(
-            id='datePicker2',
-            min_date_allowed=date(1995, 8, 5),
-            max_date_allowed=date(2040, 9, 19),
-            initial_visible_month=date(2017, 8, 5),
-            end_date=date(2030, 1, 1)),
-            html.Div(id='outputDatePicker2')
-            ]),
     
     html.Div(
         style={"textAlign":"center"},
@@ -99,15 +90,6 @@ diagrams = html.Div(children=[
             dcc.Graph(id="fig1", figure=fig1),
             html.H1("")
         ]),
-    html.Div([
-        dcc.DatePickerRange(
-            id='datePicker3',
-            min_date_allowed=date(1995, 8, 5),
-            max_date_allowed=date(2040, 9, 19),
-            initial_visible_month=date(2017, 8, 5),
-            end_date=date(2030, 1, 1)),
-            html.Div(id='outputDatePicker3')
-            ]),
 
     html.Div(
         style={"textAlign":"center"},
@@ -116,15 +98,6 @@ diagrams = html.Div(children=[
             dcc.Graph(id="fig2", figure=fig2),
             html.H1("")
         ]),
-    html.Div([
-        dcc.DatePickerRange(
-            id='datePicker4',
-            min_date_allowed=date(1995, 8, 5),
-            max_date_allowed=date(2040, 9, 19),
-            initial_visible_month=date(2017, 8, 5),
-            end_date=date(2030, 1, 1)),
-            html.Div(id='outputDatePicker4')
-            ]),
 
     html.Div("hello")
     ])
@@ -151,4 +124,55 @@ def update_fig3(start_date, end_date):
     print(filteredValues)
     fig3 = px.line(filteredValues, x="SampleDate", y="Median Genes per Cell")
     return fig3
+
+@callback(
+    Output('fig1', 'figure'),
+    Input('datePicker1', 'start_date'),
+    Input('datePicker1', 'end_date'))
+def update_fig1(start_date, end_date):
+    filteredValues= werte
+    filteredValues['SampleDate'] = filteredValues['SampleDate'].astype('datetime64[ns]')
+    if start_date is not None:
+        filteredValues=filteredValues[filteredValues["SampleDate"]>=start_date]
+
+    if end_date is not None:
+        filteredValues=filteredValues[filteredValues["SampleDate"]<=end_date]
+    
+    print(filteredValues)
+    fig1 = px.line(filteredValues, x="SampleDate", y="Median Genes per Cell")
+    return fig1
+
+@callback(
+    Output('fig2', 'figure'),
+    Input('datePicker1', 'start_date'),
+    Input('datePicker1', 'end_date'))
+def update_fig2(start_date, end_date):
+    filteredValues= werte
+    filteredValues['SampleDate'] = filteredValues['SampleDate'].astype('datetime64[ns]')
+    if start_date is not None:
+        filteredValues=filteredValues[filteredValues["SampleDate"]>=start_date]
+
+    if end_date is not None:
+        filteredValues=filteredValues[filteredValues["SampleDate"]<=end_date]
+    
+    print(filteredValues)
+    fig2 = px.line(filteredValues, x="SampleDate", y="Median Genes per Cell")
+    return fig2
+
+@callback(
+    Output('fig4', 'figure'),
+    Input('datePicker1', 'start_date'),
+    Input('datePicker1', 'end_date'))
+def update_fig4(start_date, end_date):
+    filteredValues= werte
+    filteredValues['SampleDate'] = filteredValues['SampleDate'].astype('datetime64[ns]')
+    if start_date is not None:
+        filteredValues=filteredValues[filteredValues["SampleDate"]>=start_date]
+
+    if end_date is not None:
+        filteredValues=filteredValues[filteredValues["SampleDate"]<=end_date]
+    
+    print(filteredValues)
+    fig4 = px.line(filteredValues, x="SampleDate", y="Median Genes per Cell")
+    return fig4
 
