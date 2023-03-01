@@ -50,7 +50,7 @@ for d in files:
     metrics_data.extend(metrics_v1)
 
 metrics_data_df = pd.DataFrame(metrics_data,
-                               index=[l["Samplename"] for l in metrics_data])
+                               index=[l["SampleName"] for l in metrics_data])
 
 #bestehende Datei wird geladen und durch neuen Inhalt erweitert
 """if append and exists(table):
@@ -78,19 +78,14 @@ for r in key_Column:
     list.append(bfxProjektAndSamplename[1])
     index = index + 1
 
-metadataTable["Samplename"]=list
+metadataTable["SampleName"]=list
 parts = [metadataTable, metrics_data_df]
-mergedTable = pd.merge(metadataTable, metrics_data_df, how="right", on=["Samplename"])
+mergedTable = pd.merge(metadataTable, metrics_data_df, how="right", on=["SampleName"])
 
-#Datum von String in Datumstyp konvertieren
-dates = mergedTable["SampelDate"]
-for r in dates:
-    x = dates[r]
-    #['Date'] = df['Date'].astype('datetime64[ns]')
-    x.astype("datetime64[ns]")
-    dates[r] = x
-
-
+#convert Strings in SampleDate in dates
+for d in mergedTable.columns:
+    if "Date" in d:
+        mergedTable[d]=mergedTable[d].astype("datetime64[ns]")
 
 
 with open("data/metrics_summary.pickle", 'wb') as handle:
