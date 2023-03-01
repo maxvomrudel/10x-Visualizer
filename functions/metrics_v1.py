@@ -1,4 +1,4 @@
-from csv import read_csv, percentage
+from functions.csv import percentage, read_csv
 from os.path import basename
 
 template_summary_v1 = {
@@ -24,7 +24,7 @@ template_summary_v1 = {
 }
 
 
-def read_metrics_v1(datei, template_summary_v1):
+def read_metrics_v1(datei, template_summary_v1=template_summary_v1):
     # Ergebnis-Typ für die Daten aus den CSV-Dateien
     
     #Vorlage für summary_v1

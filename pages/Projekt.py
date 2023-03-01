@@ -55,8 +55,10 @@ layout = html.Div(children = [
                     dbc.CardBody([
                         html.H4("Overview", className="capytrd-title"),
                         html.P("Number of samples: " + str(len(data.index)) ),
-                        html.P("Number of species: " + str(len(set(data["Species"].tolist())))),
-                        html.P("Total number of cells: " + str(get_values(data)) )
+                        html.P("Number of species: " + str(len(set(data["Species"].tolist()))) ),
+                        html.P("Total number of cells: " + str(get_values(data)) ),
+                        html.P("Date(s) of Execution: " + str(list(set(data["SampleDate"].tolist()))) ),
+                        html.P("Type of Projekt: " + data["Type"].tolist()[0] ),
                     ])])],width=3),
             dbc.Col(children=[
                 dbc.Container(children=[
@@ -97,7 +99,9 @@ def updateCard(bfxProjekt):
                         html.H4("Overview", className="capytrd-title"),
                         html.P("Number of samples: " + str(len(data.index)) ),
                         html.P("Number of species: " + str(len(set(data["Species"].tolist())))),
-                        html.P("Total number of cells: " + str(get_values(data)) )
+                        html.P("Total number of cells: " + str(get_values(data)) ),
+                        html.P("Date(s) of Execution: " + str(list(set(data["SampleDate"].tolist()))) ),
+                        html.P("Type of Projekt: " + str(set(data["Type"].tolist())) ),
                     ])
     return card
 

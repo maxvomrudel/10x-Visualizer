@@ -58,6 +58,16 @@ summary = dbc.Card(
 )
 
 diagrams = html.Div(children=[
+    html.Div([
+        dcc.DatePickerRange(
+            id='datePicker1',
+            min_date_allowed=date(1995, 8, 5),
+            max_date_allowed=date(2040, 9, 19),
+            initial_visible_month=date(2021, 8, 5),
+            end_date=date(2030, 1, 1)),
+            html.Div(id='outputDatePicker1')
+            ]),
+  
     html.Div(
         style={'textAlign': 'center'},
         children=[
@@ -65,15 +75,6 @@ diagrams = html.Div(children=[
             dcc.Graph(id="fig3", figure=fig3),
             html.H1("")
         ]),
-    html.Div([
-        dcc.DatePickerRange(
-            id='datePicker1',
-            min_date_allowed=date(1995, 8, 5),
-            max_date_allowed=date(2040, 9, 19),
-            initial_visible_month=date(2017, 8, 5),
-            end_date=date(2030, 1, 1)),
-            html.Div(id='outputDatePicker1')
-            ]),
 
     html.Div(
         style={"textAlign":"center"},
@@ -121,7 +122,6 @@ def update_fig3(start_date, end_date):
     if end_date is not None:
         filteredValues=filteredValues[filteredValues["SampleDate"]<=end_date]
     
-    print(filteredValues)
     fig3 = px.line(filteredValues, x="SampleDate", y="Median Genes per Cell")
     return fig3
 
@@ -138,8 +138,7 @@ def update_fig1(start_date, end_date):
     if end_date is not None:
         filteredValues=filteredValues[filteredValues["SampleDate"]<=end_date]
     
-    print(filteredValues)
-    fig1 = px.line(filteredValues, x="SampleDate", y="Median Genes per Cell")
+    fig1 = px.line(filteredValues, x="SampleDate", y="Estimated Number of Cells")
     return fig1
 
 @callback(
@@ -155,8 +154,7 @@ def update_fig2(start_date, end_date):
     if end_date is not None:
         filteredValues=filteredValues[filteredValues["SampleDate"]<=end_date]
     
-    print(filteredValues)
-    fig2 = px.line(filteredValues, x="SampleDate", y="Median Genes per Cell")
+    fig2 = px.line(filteredValues, x="SampleDate", y="Mean Reads per Cell")
     return fig2
 
 @callback(
@@ -172,7 +170,5 @@ def update_fig4(start_date, end_date):
     if end_date is not None:
         filteredValues=filteredValues[filteredValues["SampleDate"]<=end_date]
     
-    print(filteredValues)
-    fig4 = px.line(filteredValues, x="SampleDate", y="Median Genes per Cell")
+    fig4 = px.line(filteredValues, x="SampleDate", y="Number of samples")
     return fig4
-
