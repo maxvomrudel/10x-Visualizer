@@ -21,7 +21,8 @@ werte = source.groupby(["BfxProjekt"]).mean().apply(round)
 numerischeSpalten = werte.select_dtypes(include="number").columns
 arten= ["line","bar","scatter"]
 alleSpalten = source.columns
-
+nichtnumerischeSpalten = source.select_dtypes(exclude="number").columns.tolist()
+nichtnumerischeSpalten.append("-")
 
 
 fig = px.line(werte, x=werte.index, y=numerischeSpalten[0])
@@ -91,7 +92,16 @@ row = html.Div(children=[
                     ],
                     value=alleSpalten[0],
                     
-                )],width = 3)
+                )],width = 3),
+        dbc.Col(style={'textAlign': 'center'},children = [
+            dcc.Dropdown(
+                    id="facetting",
+                    options=[
+                        {"label": col, "value": col} for col in nichtnumerischeSpalten
+                    ],
+                    value="-",
+                    
+                )],width = 2.4),
     ])])
 
 
@@ -101,17 +111,24 @@ row = html.Div(children=[
         Input("y-variable", "value"),
         Input("Type of diagram", "value"),
         Input("x-scatter", "value"),
-        Input("color", "value")
+        Input("color", "value"),
+        Input("facetting", "value" )
     ],
 )
 
-def make_graph(y, Art,x,z):
+def make_graph(y, Art,x,z,f):
     if Art=="line":
         return px.line(werte, x=werte.index, y=y)
     elif Art=="scatter":
-        return px.scatter(source, x=x, y=y, color=z)
+        if f != "-":
+            return px.scatter(source, x=x, y=y, color=z, facet_col=f)
+        else:
+            return px.scatter(source, x=x, y=y, color=z)
     else:
         return px.bar(werte, x=werte.index, y=y)
+    f
+
+
 
 diagram = dcc.Graph(id="testdiagram", figure=fig, style={'height': "85vh", "width":"170vh",'textAlign': 'center' })
 
