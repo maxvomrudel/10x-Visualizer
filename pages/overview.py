@@ -14,7 +14,7 @@ load_figure_template("darkly")
 
 dash.register_page(__name__)
 
-with open("data/metrics_summary.pickle", 'rb') as handle:
+with open("Data/metrics_summary.pickle", 'rb') as handle:
     source = pickle.load(handle)
 
 #werte = source.groupby(["BfxProjekt"]).mean(numeric_only=True).apply(round)
@@ -99,9 +99,17 @@ diagrams = html.Div(children=[
             html.P("Mean reads in cells"),
             dcc.Graph(id="fig2", figure=fig2),
             html.H1("")
-        ])])
+        ]),
 
+    html.Div("hello")
+    ])
 
+layout = dbc.Container([
+    dbc.Row([
+        dbc.Col(children=[summary], width=3),
+        dbc.Col(children=[diagrams], width=9)
+    ])
+])
 @callback(
     Output('fig3', 'figure'),
     Input('datePicker1', 'start_date'),
@@ -165,10 +173,3 @@ def update_fig4(start_date, end_date):
     
     fig4 = px.line(filteredValues, x="SampleDate", y="Number of samples")
     return fig4
-
-layout = dbc.Container([
-    dbc.Row([
-        dbc.Col(children=[summary], width=3),
-        dbc.Col(children=[diagrams], width=9)
-    ])
-], fluid = True)

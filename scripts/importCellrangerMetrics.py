@@ -59,6 +59,18 @@ for r in key_Column:
     list2.append(bfxProjektAndSampleName[0])
     index = index + 1
 
+
+for d in metadataTable.columns:
+    if "Date" in d:
+        date_Column = metadataTable.loc[:,d]
+        index2=0
+        for r in date_Column:
+            x = date_Column[index2]
+            if x.len() == 0:
+                date_Column[index2]= "  "
+            index2 = index2 +1
+
+
 metadataTable["SampleName"]=list
 metadataTable["BfxProjekt"]=list2
 parts = [metadataTable, metrics_data_df]
@@ -68,7 +80,6 @@ mergedTable = pd.merge(metadataTable, metrics_data_df, how="right", on=["SampleN
 for d in mergedTable.columns:
     if "Date" in d:
         mergedTable[d]=mergedTable[d].astype("datetime64[ns]")
-
 
 with open("data/metrics_summary.pickle", 'wb') as handle:
     pickle.dump(mergedTable, handle, protocol=pickle.HIGHEST_PROTOCOL)

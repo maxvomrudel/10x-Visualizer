@@ -49,53 +49,29 @@ def getDate(data):
         dateset[r] = dateset[r].strftime("%Y-%m-%d")
     return dateset
 
-layout = dbc.Container(children = [
-        dcc.Dropdown(
-                    id="Projekt",
-                    options=[
-                        {"label": col, "value": col} for col in projekts
-                    ],
-                    value=projekts[0]
-    ),
-    html.Div(children=[
-        dbc.Row(children=[
-            dbc.Col(children=[
-                dbc.Card(id="card",children=[
-                    dbc.CardBody([
-                        html.H4("Overview", className="capytrd-title"),
-                        html.P("Species: " + str(list(set(data["Species"].tolist()))[0]) ),
-                        html.P("Number of samples: " + str(len(data.index)) ),
-                        html.P("Total number of cells: " + str(get_values(data,"Estimated Number of Cells")) ),
-                        html.P("Prepdates: " + ", ".join(getDate(data)) ),
-                        html.P("Total number of reads: " + str(get_values(data,"Number of Reads")) ),
-                        html.P("Mean genes: " + str(statistics.mean(data["Median Genes per Cell"].tolist())) ),
-                    ])])],width=3),
-            dbc.Col(width=3, children=[
-                dcc.Graph(id="p_figure1", figure=fig1)
-            ]),
-            dbc.Col(width=3, children=[
-                dcc.Graph(id="p_figure2", figure=fig2)
-            ]),
-            dbc.Col(width=3, children=[
-                dcc.Graph(id="p_figure3", figure=fig3)
-            ])]),
-        html.Div("      "),
-        dbc.Row(children=[
-            dbc.Col(width=3,children=[
-                html.Div("         ") 
-            ]),
-        dbc.Col(width=3,children=[
-               dcc.Graph(id="p_figure4", figure = fig4)
-            ])
 
-        ])]),
-    html.Div(children=[
-                dbc.Container(children=[
-                html.H4("filtering help"),
-                html.Div(html.Ul(children=[html.Li(l) for l in ["text columns: \"control\"",
-                               "numeric colums: \">4860\", \">=4860\",\"<4860\" ,\"=<4860\",\"=4860\"",
-                               "date colums: \"<2021-10-13\",..."]])),
-                dash_table.DataTable(
+dropdown = dcc.Dropdown(
+                    id="Projekt", options=[{"label": col, "value": col} for col in projekts],
+                    value=projekts[0])
+
+card = dbc.Card(id="card",children=[
+            dbc.CardBody([
+                html.H4("Overview", className="capytrd-title"),
+                html.P("Species: " + str(list(set(data["Species"].tolist()))[0]) ),
+                html.P("Number of samples: " + str(len(data.index)) ),
+                html.P("Total number of cells: " + str(get_values(data,"Estimated Number of Cells")) ),
+                html.P("Prepdates: " + ", ".join(getDate(data)) ),
+                html.P("Total number of reads: " + str(get_values(data,"Number of Reads")) ),
+                html.P("Mean genes: " + str(statistics.mean(data["Median Genes per Cell"].tolist())) ),
+            ])
+        ])
+
+table = dbc.Container(children=[
+            html.H4("filtering help"),
+            html.Div(html.Ul(children=[html.Li(l) for l in ["text columns: \"control\"",
+                "numeric colums: \">4860\", \">=4860\",\"<4860\" ,\"=<4860\",\"=4860\"",
+                "date colums: \"<2021-10-13\",..."]])),
+            dash_table.DataTable(
                 id= "table",
                 columns=[{"name": i, "id": i} for i in data.columns],
                 style_header={
@@ -116,14 +92,44 @@ layout = dbc.Container(children = [
                 page_current= 0,
                 style_table={'overflowY': 'auto'},
                 page_size=8
-                )])])], fluid = True)
+            )
+        ])
+
+
+diagram = dbc.Container(children = [
+    	    dbc.Row(children = [
+                dbc.Col(width = 4, children = [
+                    html.Div(style={'textAlign': 'center'},children=[html.H5("Estimated Number of Cells")]),            
+                    dcc.Graph(id="p_figure1", figure=fig1)
+                ]),
+                dbc.Col(width = 4, children = [
+                    html.Div(style={'textAlign': 'center'},children=[html.H5("Mean Reads per Cell")]),
+                    dcc.Graph(id="p_figure2", figure=fig2)
+                ]),
+                dbc.Col(width = 4, children = [
+                    html.Div(style={'textAlign': 'center'},children=[html.H5("Median Genes per Cell")]),
+                    dcc.Graph(id="p_figure3", figure=fig3)
+                ]),
+            ]),
+            dbc.Row(children = [
+                dbc.Col(width = 4, children = [
+                    html.Div(style={'textAlign': 'center'},children=[html.H5("Valid Barcodes")]),
+                    dcc.Graph(id="p_figure4", figure = fig4)
+                    ]),
+                dbc.Col(width = 4, children = [
+    
+                ]),
+                dbc.Col(width = 4, children = [
+    
+                ]),
+            ])
+        ])
+
+
 
 @callback(
     Output("card", "children"),
-    [
-        Input("Projekt", "value")
-    ],
-)
+    Input("Projekt", "value"))
 
 def updateCard(bfxProjekt):
     data = getData(bfxProjekt)
@@ -137,7 +143,6 @@ def updateCard(bfxProjekt):
                         html.P("Mean genes: " + str(round(statistics.mean(data["Median Genes per Cell"].tolist()))) ),
                     ])
     return card
-
 
 @callback(
     Output("table", "data"),
@@ -163,3 +168,14 @@ def makePlots(bfxProjekt):
     f3 = px.box(data, x="BfxProjekt", y="Median Genes per Cell")
     f4 = px.box(data, x="BfxProjekt", y="Valid Barcodes")
     return f1,f2,f3,f4
+
+
+
+layout = dbc.Container(style={"border":"2px black solid"}, children = [
+    dbc.Row(dropdown),
+    dbc.Row(style={"border":"2px black solid"}, children = [
+        dbc.Col(width = 3, children = [card]),
+        dbc.Col(width = 9, children = [diagram])
+    ]),
+    dbc.Row(table)
+])
