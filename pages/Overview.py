@@ -14,7 +14,7 @@ load_figure_template("darkly")
 
 dash.register_page(__name__)
 
-with open("Data/metrics_summary.pickle", 'rb') as handle:
+with open("data/metrics_summary.pickle", 'rb') as handle:
     source = pickle.load(handle)
 
 #werte = source.groupby(["BfxProjekt"]).mean(numeric_only=True).apply(round)
@@ -50,7 +50,7 @@ summary = dbc.Card(
             html.H4("Overview", className="card-title"),
             html.P("Number of experiments: " + str(werte.shape[0])),
             html.P("Number of samples: " + str(source.shape[0])),
-            html.P("Total number of cells: " + str(number_of_cells))
+            html.P("Total number of cells: " + str(number_of_cells),style={"font-size":"1.5vmin"})
         ]
         ),
     ],
@@ -110,10 +110,12 @@ layout = dbc.Container([
         dbc.Col(children=[diagrams], width=9)
     ])
 ])
+
 @callback(
     Output('fig3', 'figure'),
-    Input('datePicker1', 'start_date'),
+    Input('datePicker1', "start_date"),
     Input('datePicker1', 'end_date'))
+
 def update_fig3(start_date, end_date):
     filteredValues= werte
     filteredValues['SampleDate'] = filteredValues['SampleDate'].astype('datetime64')

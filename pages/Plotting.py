@@ -32,7 +32,7 @@ SIDEBAR_STYLE = {
     "padding": "16px"
 }
 CONTENT_STYLE = {
-    "margin-left": "20px"
+    #"margin-left": "20px"
 }
 
 row = html.Div(children=[
@@ -51,6 +51,9 @@ row = html.Div(children=[
 
         dbc.Col(style={'textAlign': 'center'},children=[
             html.H6("color (only in scatter)")
+        ]),
+        dbc.Col(style={'textAlign': 'center'},children=[
+            html.H6("facetting (only in scatter)")
         ])
     ]),
     dbc.Row([
@@ -62,7 +65,7 @@ row = html.Div(children=[
                     ],
                 value="Estimated Number of Cells"                        
                 ),
-        ],width = 3),
+        ]),
    
         dbc.Col(style={'textAlign': 'center'},children = [
             dcc.Dropdown(
@@ -72,7 +75,7 @@ row = html.Div(children=[
                     ],
                     value=arten[0],
                     
-                )],width = 3),
+                )]),
    
         dbc.Col(style={'textAlign': 'center'},children = [
             dcc.Dropdown(
@@ -82,7 +85,7 @@ row = html.Div(children=[
                     ],
                     value=numerischeSpalten[0],
                     
-                )],width = 3),
+                )]),
 
         dbc.Col(style={'textAlign': 'center'},children = [
             dcc.Dropdown(
@@ -92,7 +95,7 @@ row = html.Div(children=[
                     ],
                     value=alleSpalten[0],
                     
-                )],width = 3),
+                )]),
         dbc.Col(style={'textAlign': 'center'},children = [
             dcc.Dropdown(
                     id="facetting",
@@ -101,7 +104,7 @@ row = html.Div(children=[
                     ],
                     value="-",
                     
-                )],width = 2.4),
+                )]),
     ])])
 
 
@@ -126,16 +129,13 @@ def make_graph(y, Art,x,z,f):
             return px.scatter(source, x=x, y=y, color=z)
     else:
         return px.bar(werte, x=werte.index, y=y)
-    f
-
-
 
 diagram = dcc.Graph(id="testdiagram", figure=fig, style={'height': "85vh", "width":"170vh",'textAlign': 'center' })
 
-
-content = html.Div(html.Div(
+content = dbc.Container(
     [diagram],
-    style=CONTENT_STYLE))
+    style=CONTENT_STYLE,
+    fluid = True)
 
 layout = html.Div([
     html.H1(""),

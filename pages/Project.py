@@ -171,9 +171,9 @@ def makePlots(bfxProjekt):
 
 
 
-layout = dbc.Container(style={"border":"2px black solid"}, children = [
+layout = dbc.Container(children = [
     dbc.Row(dropdown),
-    dbc.Row(style={"border":"2px black solid"}, children = [
+    dbc.Row(children = [
         dbc.Col(width = 3, children = [card]),
         dbc.Col(width = 9, children = [diagram])
     ]),
