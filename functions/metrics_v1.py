@@ -1,4 +1,4 @@
-from csv import read_csv, percentage
+from functions.csv import percentage, read_csv
 from os.path import basename
 
 template_summary_v1 = {
@@ -24,7 +24,7 @@ template_summary_v1 = {
 }
 
 
-def read_metrics_v1(datei, template_summary_v1):
+def read_metrics_v1(datei, template_summary_v1=template_summary_v1):
     # Ergebnis-Typ für die Daten aus den CSV-Dateien
     
     #Vorlage für summary_v1
@@ -36,7 +36,7 @@ def read_metrics_v1(datei, template_summary_v1):
     # Format 
     x = dataname.split(".", 1)
     result[0]["BfxProjekt"] = x[0]
-    result[0]["Samplename"] = x[1]
+    result[0]["SampleName"] = x[1]
     result[0]["Type"] = "V1"
 
     return result

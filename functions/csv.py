@@ -41,6 +41,7 @@ def convert_values(dict: dict, template: dict):
 # konvertiert einen string, der ein prozentwert ist, in einen Wert zw. 0 (0%) und 1 (100%)
 def percentage(rawValue: str):
     rawValue = rawValue.replace('%', '')
+    rawValue = float(rawValue)
     rawValue = rawValue * 0.01
     rawValue = round(rawValue, 3)
     return float(rawValue)

@@ -10,11 +10,16 @@ import pandas as pd
 dash.register_page(__name__)
 
 with open("data/metrics_summary.pickle", 'rb') as handle:
-    testdatei= pickle.load(handle)
+    source= pickle.load(handle)
 
-layout = dbc.Container(children=[dash_table.DataTable(
+layout = dbc.Container(fluid=True, children=[
+    html.H4("filtering help"),
+    html.Div(html.Ul(children=[html.Li(l) for l in ["text columns: \"control\"",
+                               "numeric colums: \">4860\", \">=4860\",\"<4860\" ,\"=<4860\",\"=4860\"",
+                               "date colums: \"<2021-10-13\",..."]])),
+    dash_table.DataTable(
         id='datatable-interactivity',
-        columns=[{"name": i, "id": i, "deletable": True} for i in testdatei.columns],
+        columns=[{"name": i, "id": i, "type":"any"} for i in source.columns],
         style_header={
         'backgroundColor': 'rgb(30, 30, 30)',
         'color': 'white'
@@ -24,14 +29,14 @@ layout = dbc.Container(children=[dash_table.DataTable(
         'color': 'white'
     },
         
-        data=testdatei.to_dict('records'),
+        data=source.to_dict('records'),
         sort_action="native",
         sort_mode="multi",
         column_selectable="single",
-        row_deletable=True,
+        filter_action="native",
         page_action="native",
         page_current= 0,
         style_table={'overflowY': 'auto'},
-        page_size=20
+        page_size=19
     )])
 

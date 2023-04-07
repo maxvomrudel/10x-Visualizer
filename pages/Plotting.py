@@ -14,15 +14,18 @@ load_figure_template("darkly")
 
 dash.register_page(__name__)
 
-with open("table", 'rb') as handle:
-    testdatei = pickle.load(handle)
+with open("data/metrics_summary.pickle", 'rb') as handle:
+    source = pickle.load(handle)
 
-werte = testdatei.groupby(["BfxProjekt"]).mean().apply(round)
+werte = source.groupby(["BfxProjekt"]).mean().apply(round)
 numerischeSpalten = werte.select_dtypes(include="number").columns
 arten= ["line","bar","scatter"]
-alleSpalten = testdatei.columns
-
-
+alleSpalten = source.columns
+nichtnumerischeSpalten = source.select_dtypes(exclude="number").columns.tolist()
+nichtnumerischeSpalten.append("-")
+nichtnumerischeSpalten.remove("SampleName")
+nichtnumerischeSpalten.remove("Key")
+nichtnumerischeSpalten.remove("Filename")
 
 fig = px.line(werte, x=werte.index, y=numerischeSpalten[0])
 
@@ -30,9 +33,8 @@ SIDEBAR_STYLE = {
     "width": "25rem",
     "padding": "16px"
 }
-
 CONTENT_STYLE = {
-    "margin-left": "20px"
+    #"margin-left": "20px"
 }
 
 row = html.Div(children=[
@@ -51,6 +53,9 @@ row = html.Div(children=[
 
         dbc.Col(style={'textAlign': 'center'},children=[
             html.H6("color (only in scatter)")
+        ]),
+        dbc.Col(style={'textAlign': 'center'},children=[
+            html.H6("facetting (only in scatter)")
         ])
     ]),
     dbc.Row([
@@ -62,7 +67,7 @@ row = html.Div(children=[
                     ],
                 value="Estimated Number of Cells"                        
                 ),
-        ],width = 3),
+        ]),
    
         dbc.Col(style={'textAlign': 'center'},children = [
             dcc.Dropdown(
@@ -72,7 +77,7 @@ row = html.Div(children=[
                     ],
                     value=arten[0],
                     
-                )],width = 3),
+                )]),
    
         dbc.Col(style={'textAlign': 'center'},children = [
             dcc.Dropdown(
@@ -82,7 +87,7 @@ row = html.Div(children=[
                     ],
                     value=numerischeSpalten[0],
                     
-                )],width = 3),
+                )]),
 
         dbc.Col(style={'textAlign': 'center'},children = [
             dcc.Dropdown(
@@ -92,7 +97,16 @@ row = html.Div(children=[
                     ],
                     value=alleSpalten[0],
                     
-                )],width = 3)
+                )]),
+        dbc.Col(style={'textAlign': 'center'},children = [
+            dcc.Dropdown(
+                    id="facetting",
+                    options=[
+                        {"label": col, "value": col} for col in nichtnumerischeSpalten
+                    ],
+                    value="-",
+                    
+                )]),
     ])])
 
 
@@ -102,24 +116,28 @@ row = html.Div(children=[
         Input("y-variable", "value"),
         Input("Type of diagram", "value"),
         Input("x-scatter", "value"),
-        Input("color", "value")
+        Input("color", "value"),
+        Input("facetting", "value" )
     ],
 )
 
-def make_graph(y, Art,x,z):
+def make_graph(y, Art,x,z,f):
     if Art=="line":
         return px.line(werte, x=werte.index, y=y)
     elif Art=="scatter":
-        return px.scatter(testdatei, x=x, y=y, color=z)
+        if f != "-":
+            return px.scatter(source, x=x, y=y, color=z, facet_col=f, facet_col_wrap=(4))
+        else:
+            return px.scatter(source, x=x, y=y, color=z)
     else:
         return px.bar(werte, x=werte.index, y=y)
 
 diagram = dcc.Graph(id="testdiagram", figure=fig, style={'height': "85vh", "width":"170vh",'textAlign': 'center' })
 
-
-content = html.Div(html.Div(
+content = dbc.Container(
     [diagram],
-    style=CONTENT_STYLE))
+    style=CONTENT_STYLE,
+    fluid = True)
 
 layout = html.Div([
     html.H1(""),

@@ -6,7 +6,7 @@ from dash.dependencies import Input, Output
 from app import app
 
 # Connect to your app pages
-from pages import overview, data
+from pages import Data, Overview
 
 # Connect the navbar to the index
 from components import navbar
@@ -26,9 +26,9 @@ app.layout = html.Div([
               [Input('url', 'pathname')])
 def display_page(pathname):
     if pathname == '/overview':
-        return overview.layout
+        return Overview.layout
     if pathname == '/data':
-        return data.layout
+        return Data.layout
     else:
         return ("nü"
             "nü"
