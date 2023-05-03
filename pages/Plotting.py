@@ -125,7 +125,7 @@ def make_graph(y, Art,x,z,f):
     if Art=="line":
         return px.line(werte, x=werte.index, y=y)
     elif Art=="scatter":
-        return px.scatter(testdatei, x=x, y=y, color=z)
+        return px.scatter(source, x=x, y=y, color=z)
     else:
         return px.bar(werte, x=werte.index, y=y)
 

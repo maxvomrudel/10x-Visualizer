@@ -1,4 +1,4 @@
-from functions.csv import percentage, read_csv
+from functions.csv import percentage, read_csv, csv_data
 from os.path import basename
 
 template_summary_v1 = {
@@ -23,20 +23,23 @@ template_summary_v1 = {
     "Median UMI Counts per Cell": int,
 }
 
+COL_BFX_PROJECT = "BfxProjekt"
+COL_SAMPLE_NAME = "SampleName"
+COL_FILENAME = "Filename"
+COL_TYPE = "Type"
 
-def read_metrics_v1(datei, template_summary_v1=template_summary_v1):
-    # Ergebnis-Typ für die Daten aus den CSV-Dateien
+def read_metrics_v1(filename: str, template = template_summary_v1) -> csv_data :
+    """
+    Datei unter Verwendung des summary_v1 Templates einlesen
+    und Ergebnis anreichern
+    """
     
-    #Vorlage für summary_v1
-    result = read_csv(datei, template_summary_v1)
-    result[0]["Filename"] = datei
-    dateiname = datei.replace('.cellranger_rnaseq_metrics_summary.csv', '')
-    dataname = basename(dateiname)
+    data = read_csv(filename, template)
+    meta = basename(filename.replace('.cellranger_rnaseq_metrics_summary.csv', '')).split(".",1)
+    
+    data[0][COL_FILENAME] = filename
+    data[0][COL_BFX_PROJECT] = meta[0]
+    data[0][COL_SAMPLE_NAME] = meta[1]
+    data[0][COL_TYPE] = "V1"
 
-    # Format 
-    x = dataname.split(".", 1)
-    result[0]["BfxProjekt"] = x[0]
-    result[0]["SampleName"] = x[1]
-    result[0]["Type"] = "V1"
-
-    return result
+    return data
