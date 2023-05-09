@@ -17,17 +17,17 @@ dash.register_page(__name__)
 with open("data/metrics_summary.pickle", 'rb') as handle:
     source = pickle.load(handle)
 
-werte = source.groupby(["BfxProjekt"]).mean().apply(round)
-numerischeSpalten = werte.select_dtypes(include="number").columns
-arten= ["line","bar","scatter"]
-alleSpalten = source.columns
-nichtnumerischeSpalten = source.select_dtypes(exclude="number").columns.tolist()
-nichtnumerischeSpalten.append("-")
-nichtnumerischeSpalten.remove("SampleName")
-nichtnumerischeSpalten.remove("Key")
-nichtnumerischeSpalten.remove("Filename")
+values = source.groupby(["BfxProjekt"]).mean().apply(round)
+numeric_columns = values.select_dtypes(include="number").columns
+types = ["line","bar","scatter"]
+every_column = source.columns
+not_numeric_columns = source.select_dtypes(exclude="number").columns.tolist()
+not_numeric_columns.append("-")
+not_numeric_columns.remove("SampleName")
+not_numeric_columns.remove("Key")
+not_numeric_columns.remove("Filename")
 
-fig = px.line(werte, x=werte.index, y=numerischeSpalten[0])
+fig = px.line(values, x=values.index, y=numeric_columns[0])
 
 SIDEBAR_STYLE = {
     "width": "25rem",
@@ -63,7 +63,7 @@ row = html.Div(children=[
             dcc.Dropdown(
                     id="y-variable",
                     options=[
-                        {"label": col, "value": col} for col in numerischeSpalten
+                        {"label": col, "value": col} for col in numeric_columns
                     ],
                 value="Estimated Number of Cells"                        
                 ),
@@ -73,9 +73,9 @@ row = html.Div(children=[
             dcc.Dropdown(
                     id="Type of diagram",
                     options=[
-                        {"label": col, "value": col} for col in arten
+                        {"label": col, "value": col} for col in types
                     ],
-                    value=arten[0],
+                    value=types[0],
                     
                 )]),
    
@@ -83,9 +83,9 @@ row = html.Div(children=[
             dcc.Dropdown(
                     id="x-scatter",
                     options=[
-                        {"label": col, "value": col} for col in numerischeSpalten
+                        {"label": col, "value": col} for col in numeric_columns
                     ],
-                    value=numerischeSpalten[0],
+                    value=numeric_columns[0],
                     
                 )]),
 
@@ -93,16 +93,16 @@ row = html.Div(children=[
             dcc.Dropdown(
                     id="color",
                     options=[
-                        {"label": col, "value": col} for col in alleSpalten
+                        {"label": col, "value": col} for col in every_column
                     ],
-                    value=alleSpalten[0],
+                    value=every_column[0],
                     
                 )]),
         dbc.Col(style={'textAlign': 'center'},children = [
             dcc.Dropdown(
                     id="facetting",
                     options=[
-                        {"label": col, "value": col} for col in nichtnumerischeSpalten
+                        {"label": col, "value": col} for col in not_numeric_columns
                     ],
                     value="-",
                     
@@ -111,7 +111,7 @@ row = html.Div(children=[
 
 
 @callback(
-    Output("testdiagram", "figure"),
+    Output("output_diagram", "figure"),
     [
         Input("y-variable", "value"),
         Input("Type of diagram", "value"),
@@ -121,15 +121,15 @@ row = html.Div(children=[
     ],
 )
 
-def make_graph(y, Art,x,z,f):
-    if Art=="line":
-        return px.line(werte, x=werte.index, y=y)
-    elif Art=="scatter":
+def make_graph(y, type_of_diagram,x,z,f):
+    if type_of_diagram=="line":
+        return px.line(values, x=values.index, y=y)
+    elif type_of_diagram=="scatter":
         return px.scatter(source, x=x, y=y, color=z)
     else:
-        return px.bar(werte, x=werte.index, y=y)
+        return px.bar(values, x=values.index, y=y)
 
-diagram = dcc.Graph(id="testdiagram", figure=fig, style={'height': "85vh", "width":"170vh",'textAlign': 'center' })
+diagram = dcc.Graph(id="output_diagram", figure=fig, style={'height': "85vh", "width":"170vh",'textAlign': 'center' })
 
 content = dbc.Container(
     [diagram],

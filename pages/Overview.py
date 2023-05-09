@@ -20,25 +20,25 @@ with open("data/metrics_summary.pickle", 'rb') as handle:
 #werte = source.groupby(["BfxProjekt"]).mean(numeric_only=True).apply(round)
 
 
-numerischeSpalten = source.select_dtypes(include="number").columns
-andereSpalten = source.select_dtypes(exclude="number").columns
-werte = source.groupby("BfxProjekt").aggregate({s: 'mean' for s in numerischeSpalten} | {s: 'first' for s in andereSpalten})
-werte=werte.sort_values("SampleDate")
-fig1 = px.line(werte, x="SampleDate", y="Estimated Number of Cells")
-fig2 = px.line(werte, x="SampleDate", y="Mean Reads per Cell")
-fig3 = px.line(werte, x="SampleDate", y="Median Genes per Cell")
-werte2 = source.groupby(["BfxProjekt"]).count()
-werte2= werte2[["SampleDate"]]
-werte2.rename(columns={"SampleDate":"Number of samples"}, inplace=True)
-werte = pd.concat([werte, werte2], axis=1)
-fig4 = px.line(werte, x="SampleDate", y="Number of samples")
+numeric_columns = source.select_dtypes(include="number").columns
+other_columns = source.select_dtypes(exclude="number").columns
+Value = source.groupby("BfxProjekt").aggregate({s: 'mean' for s in numeric_columns} | {s: 'first' for s in other_columns})
+Value = Value.sort_values("SampleDate")
+fig1 = px.line(Value, x="SampleDate", y="Estimated Number of Cells")
+fig2 = px.line(Value, x="SampleDate", y="Mean Reads per Cell")
+fig3 = px.line(Value, x="SampleDate", y="Median Genes per Cell")
+values2 = source.groupby(["BfxProjekt"]).count()
+values2= values2[["SampleDate"]]
+values2.rename(columns={"SampleDate":"Number of samples"}, inplace=True)
+Value = pd.concat([Value, values2], axis=1)
+fig4 = px.line(Value, x="SampleDate", y="Number of samples")
 
 def get_values(input):
     return sum(source[input])
 
 number_of_cells = get_values("Estimated Number of Cells")
 
-table_content = [werte.shape[0], source.shape[0], number_of_cells]
+table_content = [Value.shape[0], source.shape[0], number_of_cells]
 Index = [
     "1. Number of experiments", "2. Number of samples",
     "3. Total number of cells"
@@ -48,7 +48,7 @@ summary = dbc.Card(
     [
         dbc.CardBody([
             html.H4("Overview", className="card-title"),
-            html.P("Number of experiments: " + str(werte.shape[0])),
+            html.P("Number of experiments: " + str(Value.shape[0])),
             html.P("Number of samples: " + str(source.shape[0])),
             html.P("Total number of cells: " + str(number_of_cells),style={"font-size":"1.5vmin"})
         ]
@@ -117,7 +117,7 @@ layout = dbc.Container([
     Input('datePicker1', 'end_date'))
 
 def update_fig3(start_date, end_date):
-    filteredValues= werte
+    filteredValues= Value
     filteredValues['SampleDate'] = filteredValues['SampleDate'].astype('datetime64')
     if start_date is not None:
         filteredValues=filteredValues[filteredValues["SampleDate"]>=start_date]
@@ -133,7 +133,7 @@ def update_fig3(start_date, end_date):
     Input('datePicker1', 'start_date'),
     Input('datePicker1', 'end_date'))
 def update_fig1(start_date, end_date):
-    filteredValues= werte
+    filteredValues= Value
     filteredValues['SampleDate'] = filteredValues['SampleDate'].astype('datetime64[ns]')
     if start_date is not None:
         filteredValues=filteredValues[filteredValues["SampleDate"]>=start_date]
@@ -149,7 +149,7 @@ def update_fig1(start_date, end_date):
     Input('datePicker1', 'start_date'),
     Input('datePicker1', 'end_date'))
 def update_fig2(start_date, end_date):
-    filteredValues= werte
+    filteredValues= Value
     filteredValues['SampleDate'] = filteredValues['SampleDate'].astype('datetime64[ns]')
     if start_date is not None:
         filteredValues=filteredValues[filteredValues["SampleDate"]>=start_date]
@@ -165,7 +165,7 @@ def update_fig2(start_date, end_date):
     Input('datePicker1', 'start_date'),
     Input('datePicker1', 'end_date'))
 def update_fig4(start_date, end_date):
-    filteredValues= werte
+    filteredValues= Value
     filteredValues['SampleDate'] = filteredValues['SampleDate'].astype('datetime64[ns]')
     if start_date is not None:
         filteredValues=filteredValues[filteredValues["SampleDate"]>=start_date]
