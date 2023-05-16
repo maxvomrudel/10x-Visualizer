@@ -122,12 +122,13 @@ row = html.Div(children=[
 )
 
 def make_graph(y, type_of_diagram,x,z,f):
+    if f == "-": f = None
     if type_of_diagram=="line":
-        return px.line(values, x=values.index, y=y)
+        return px.line(values, x=values.index, y=y, facet_col=f)
     elif type_of_diagram=="scatter":
-        return px.scatter(source, x=x, y=y, color=z)
+        return px.scatter(source, x=x, y=y, color=z, facet_col=f)
     else:
-        return px.bar(values, x=values.index, y=y)
+        return px.bar(values, x=values.index, y=y, facet_col=f)
 
 diagram = dcc.Graph(id="output_diagram", figure=fig, style={'height': "85vh", "width":"170vh",'textAlign': 'center' })
 
