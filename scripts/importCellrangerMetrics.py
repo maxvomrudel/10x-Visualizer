@@ -79,7 +79,7 @@ def parse_metadata(filename: str) -> pd.DataFrame:
         bfxProjektAndSampleName = row.split(".",1)
         sample_names.append(bfxProjektAndSampleName[1])
         bfx_projects.append(bfxProjektAndSampleName[0])
-        index =+ 1
+        index += 1
 
     meta_df[COL_SAMPLE_NAME]=sample_names
     meta_df[COL_BFX_PROJECT]=bfx_projects
@@ -91,7 +91,7 @@ def parse_metadata(filename: str) -> pd.DataFrame:
             index2=0
             for r in date_Column:
                 x = date_Column[index2]
-                if x.len() == 0:
+                if len(x) == 0:
                     date_Column[index2]= "  "
                 index2 = index2 +1
 
@@ -115,7 +115,7 @@ def merge_and_store(target_filename: str, metrics_df: pd.DataFrame, metadata_df:
 # ---------------------------------------------------------------
 
 # metadata 
-METADATA_FILENAME = 'metadata.tsv'
+METADATA_FILENAME = args.meta
 
 # where to store the serialized data table
 OUTPUT_FILENAME = "data/metrics_summary.pickle"
